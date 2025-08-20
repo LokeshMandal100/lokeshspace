@@ -1,86 +1,54 @@
-/* Body and heading styling */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
-  background-color: #f7f7f7;
-  padding: 20px;
+  background: #f0f0f0;
 }
 
 h1 {
-  color: #333;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 24px;
 }
 
-/* Scoreboard styling */
-#score-board {
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-/* Game board grid */
 #game-board {
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-gap: 10px;
   justify-content: center;
-  margin-bottom: 20px;
+  margin: 20px auto;
 }
 
-/* Individual box */
 .box {
   width: 100px;
   height: 100px;
-  background-color: #ddd;
+  background: linear-gradient(135deg, #74ebd5, #ACB6E5);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: bold;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 10px;
+  position: relative;
 }
 
-/* Clicked box */
-.box.clicked {
-  background-color: #4caf50;
-  color: white;
-  pointer-events: none;
+/* ✅ Eagle logo inside every box, above number */
+.box::before {
+  content: "";
+  display: block;
+  width: 35px;
+  height: 35px;
+  margin-bottom: 5px;
+  background: url('eagle.png') no-repeat center/contain;
 }
 
-/* Result area styling */
-#result-area {
-  margin-top: 20px;
-}
-
-/* Each result message */
 .result-box {
   margin-top: 10px;
-  font-size: 18px;
-  color: #444;
-}
-
-/* Winner message with trophy */
-.final-result {
-  font-size: 24px;
-  font-weight: bold;
-  color: #e91e63;
-  margin-top: 20px;
-}
-
-/* Restart button */
-#restart-btn {
-  padding: 10px 20px;
   font-size: 16px;
-  border: none;
-  background-color: #2196f3;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-/* Hover effect on restart */
-#restart-btn:hover {
-  background-color: #0b7dda;
+.final-result {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
 }
