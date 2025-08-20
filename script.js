@@ -76,17 +76,18 @@ function endOrNextTurn() {
   // Agar ye last move hai → final result show
   if (round === 3 && currentPlayer === 2) {
     gameOver = true;
-    // ✅ Last score reflect hoga
-    updateDisplay();
+    updateDisplay(); // ✅ Last score update
     setTimeout(showFinalResult, 500);
     return;
   }
 
-  // Turn switch
-  currentPlayer = currentPlayer === 1 ? 2 : 1;
-
-  // ✅ Round increment jab Player 2 complete kare
-  if (currentPlayer === 1) round++;
+  // ✅ Turn switch aur round update
+  if (currentPlayer === 1) {
+    currentPlayer = 2;  // P1 ke baad P2
+  } else {
+    currentPlayer = 1;  // P2 ke baad P1
+    round++;            // ✅ Round tabhi badhega jab P2 ki turn khatam ho
+  }
 
   updateDisplay();
   resetBoxes();
