@@ -52,6 +52,21 @@
     return false;
   }
 
+  function skipTurn() {
+    const current = parseCurrentPlayer();
+
+    // Trigger artificial "2 clicks done with 0 score"
+    const evt = new CustomEvent("autoSkip", { detail: { player: current } });
+    window.dispatchEvent(evt);
+
+    // Next player ka turn set karo
+    const next = otherPlayer(current);
+    setCurrentPlayer(next);
+
+    // Fir timer restart
+    startTurnTimer();
+  }
+
   function startTurnTimer() {
     clearExistingTimer();
     timeLeft = 10;
@@ -68,9 +83,7 @@
 
       if (timeLeft <= 0) {
         clearExistingTimer();
-        const current = parseCurrentPlayer();
-        setCurrentPlayer(otherPlayer(current));
-        startTurnTimer();
+        skipTurn();
       }
     }, 1000);
   }
