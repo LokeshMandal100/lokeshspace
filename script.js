@@ -67,6 +67,9 @@ function checkScore(b1, b2) {
   }
 
   resultArea.appendChild(boxResult);
+
+  // ✅ Score turant UI pe show hoga
+  updateDisplay();
 }
 
 function endOrNextTurn() {
