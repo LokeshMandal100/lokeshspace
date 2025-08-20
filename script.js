@@ -33,7 +33,6 @@ function handleBoxClick(e) {
   const box = e.target;
   if (box.classList.contains('clicked') || selectedBoxes.includes(box)) return;
 
-  // ✅ Prevent more than 2 clicks per turn
   if (selectedBoxes.length >= 2) return;
 
   box.classList.add('clicked');
@@ -41,7 +40,6 @@ function handleBoxClick(e) {
   selectedBoxes.push(box);
 
   if (selectedBoxes.length === 2) {
-    // ✅ After 2 clicks, check score
     setTimeout(() => {
       checkScore(selectedBoxes[0], selectedBoxes[1]);
       endOrNextTurn();
@@ -67,26 +65,22 @@ function checkScore(b1, b2) {
   }
 
   resultArea.appendChild(boxResult);
-
-  // ✅ Score turant UI pe show hoga
   updateDisplay();
 }
 
 function endOrNextTurn() {
-  // Agar ye last move hai → final result show
   if (round === 3 && currentPlayer === 2) {
     gameOver = true;
-    updateDisplay(); // ✅ Last score update
+    updateDisplay();
     setTimeout(showFinalResult, 500);
     return;
   }
 
-  // ✅ Turn switch aur round update
   if (currentPlayer === 1) {
-    currentPlayer = 2;  // P1 ke baad P2
+    currentPlayer = 2;
   } else {
-    currentPlayer = 1;  // P2 ke baad P1
-    round++;            // ✅ Round tabhi badhega jab P2 ki turn khatam ho
+    currentPlayer = 1;
+    round++;
   }
 
   updateDisplay();
@@ -126,24 +120,5 @@ function restartGame() {
   if (window.RoundTimer) window.RoundTimer.reset();
 }
 
-boxes.forEach(box => {
-  box.addEventListener('click', handleBoxClick);
-});
-
-restartBtn.addEventListener('click', restartGame);
-
-// ✅ Handle autoSkip event from timer.js
-window.addEventListener('autoSkip', () => {
-  if (gameOver) return;
-
-  const boxResult = document.createElement('div');
-  boxResult.className = 'result-box';
-  boxResult.textContent = `⏰ Player ${currentPlayer} skipped! 0 points.`;
-  resultArea.appendChild(boxResult);
-
-  selectedBoxes = [];
-  endOrNextTurn();
-});
-
-resetBoxes();
-updateDisplay();
+boxes.forEach(box => box.addEventListener('click', handleBoxClick));
+rest
