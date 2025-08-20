@@ -33,58 +33,72 @@ function handleBoxClick(e) {
   const box = e.target;
   if (box.classList.contains('clicked') || selectedBoxes.includes(box)) return;
 
+  // ✅ Prevent more than 2 clicks per turn
+  if (selectedBoxes.length >= 2) return;
+
   box.classList.add('clicked');
   box.textContent = box.dataset.number;
   selectedBoxes.push(box);
 
   if (selectedBoxes.length === 2) {
+    // ✅ After 2 clicks, check score
     setTimeout(() => {
-      const n1 = parseInt(selectedBoxes[0].dataset.number);
-      const n2 = parseInt(selectedBoxes[1].dataset.number);
-
-      const boxResult = document.createElement('div');
-      boxResult.className = 'result-box';
-
-      const result1 = n1 % 2 === 0 ? "Even" : "Odd";
-      const result2 = n2 % 2 === 0 ? "Even" : "Odd";
-
-      if (result1 === result2) {
-        scores[currentPlayer - 1] += 10;
-        boxResult.textContent = `Both are ${result1}! +10 points to Player ${currentPlayer}`;
-      } else {
-        boxResult.textContent = `One is ${result1}, other is ${result2}. 0 points!`;
-      }
-
-      resultArea.appendChild(boxResult);
-
-      if (round === 3 && currentPlayer === 2) {
-        gameOver = true;
-        setTimeout(() => {
-          const finalResult = document.createElement('div');
-          finalResult.className = 'result-box final-result';
-
-          if (scores[0] > scores[1]) {
-            finalResult.textContent = '🏆 Player 1 Wins!';
-            alert("Player 2 → Better Luck Next Time!");
-          } else if (scores[1] > scores[0]) {
-            finalResult.textContent = '🏆 Player 2 Wins!';
-            alert("Player 1 → Better Luck Next Time!");
-          } else {
-            finalResult.textContent = '🤝 It\'s a Tie!';
-          }
-
-          resultArea.appendChild(finalResult);
-          boxes.forEach(box => box.style.pointerEvents = 'none');
-          restartBtn.style.display = 'inline-block';
-        }, 500);
-      } else {
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
-        if (currentPlayer === 1) round++;
-        updateDisplay();
-        resetBoxes();
-      }
+      checkScore(selectedBoxes[0], selectedBoxes[1]);
+      endOrNextTurn();
     }, 500);
   }
+}
+
+function checkScore(b1, b2) {
+  const n1 = parseInt(b1.dataset.number);
+  const n2 = parseInt(b2.dataset.number);
+
+  const boxResult = document.createElement('div');
+  boxResult.className = 'result-box';
+
+  const result1 = n1 % 2 === 0 ? "Even" : "Odd";
+  const result2 = n2 % 2 === 0 ? "Even" : "Odd";
+
+  if (result1 === result2) {
+    scores[currentPlayer - 1] += 10;
+    boxResult.textContent = `Both are ${result1}! +10 points to Player ${currentPlayer}`;
+  } else {
+    boxResult.textContent = `One is ${result1}, other is ${result2}. 0 points!`;
+  }
+
+  resultArea.appendChild(boxResult);
+}
+
+function endOrNextTurn() {
+  if (round === 3 && currentPlayer === 2) {
+    gameOver = true;
+    setTimeout(showFinalResult, 500);
+  } else {
+    currentPlayer = currentPlayer === 1 ? 2 : 1;
+    if (currentPlayer === 1) round++;
+    updateDisplay();
+    resetBoxes();
+    if (window.RoundTimer) window.RoundTimer.reset();
+  }
+}
+
+function showFinalResult() {
+  const finalResult = document.createElement('div');
+  finalResult.className = 'result-box final-result';
+
+  if (scores[0] > scores[1]) {
+    finalResult.textContent = '🏆 Player 1 Wins!';
+    alert("Player 2 → Better Luck Next Time!");
+  } else if (scores[1] > scores[0]) {
+    finalResult.textContent = '🏆 Player 2 Wins!';
+    alert("Player 1 → Better Luck Next Time!");
+  } else {
+    finalResult.textContent = '🤝 It\'s a Tie!';
+  }
+
+  resultArea.appendChild(finalResult);
+  boxes.forEach(box => box.style.pointerEvents = 'none');
+  restartBtn.style.display = 'inline-block';
 }
 
 function restartGame() {
@@ -97,6 +111,7 @@ function restartGame() {
   restartBtn.style.display = 'none';
   updateDisplay();
   resetBoxes();
+  if (window.RoundTimer) window.RoundTimer.reset();
 }
 
 boxes.forEach(box => {
@@ -104,6 +119,14 @@ boxes.forEach(box => {
 });
 
 restartBtn.addEventListener('click', restartGame);
+
+// ✅ Handle autoSkip event from timer.js
+window.addEventListener('autoSkip', () => {
+  if (gameOver) return;
+  // Player skipped → no clicks, 0 points → move to next turn
+  selectedBoxes = [];
+  endOrNextTurn();
+});
 
 resetBoxes();
 updateDisplay();
