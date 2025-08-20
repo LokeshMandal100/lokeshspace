@@ -15,7 +15,7 @@ function resetBoxes() {
   boxes.forEach(box => {
     box.classList.remove('clicked');
     box.textContent = '';
-    box.dataset.number = Math.floor(Math.random() * 100) + 1;
+    box.dataset.number = Math.floor(Math.random() * 100) + 1; // random 1-100
     box.style.pointerEvents = 'auto';
   });
   selectedBoxes = [];
@@ -65,10 +65,12 @@ function handleBoxClick(e) {
 
           if (scores[0] > scores[1]) {
             finalResult.textContent = '🏆 Player 1 Wins!';
+            alert("Player 2 → Better Luck Next Time!");
           } else if (scores[1] > scores[0]) {
             finalResult.textContent = '🏆 Player 2 Wins!';
+            alert("Player 1 → Better Luck Next Time!");
           } else {
-            finalResult.textContent = 'It\'s a Tie!';
+            finalResult.textContent = '🤝 It\'s a Tie!';
           }
 
           resultArea.appendChild(finalResult);
