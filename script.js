@@ -123,7 +123,12 @@ restartBtn.addEventListener('click', restartGame);
 // ✅ Handle autoSkip event from timer.js
 window.addEventListener('autoSkip', () => {
   if (gameOver) return;
-  // Player skipped → no clicks, 0 points → move to next turn
+
+  const boxResult = document.createElement('div');
+  boxResult.className = 'result-box';
+  boxResult.textContent = `⏰ Player ${currentPlayer} skipped! 0 points.`;
+  resultArea.appendChild(boxResult);
+
   selectedBoxes = [];
   endOrNextTurn();
 });
