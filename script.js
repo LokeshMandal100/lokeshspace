@@ -114,11 +114,26 @@ function restartGame() {
   selectedBoxes = [];
   gameOver = false;
   resultArea.innerHTML = '';
-  restartBtn.style.display = 'none';
+  restartBtn.style.display = 'none';   // ✅ Button hide hoga
   updateDisplay();
   resetBoxes();
   if (window.RoundTimer) window.RoundTimer.reset();
 }
 
 boxes.forEach(box => box.addEventListener('click', handleBoxClick));
-rest
+restartBtn.addEventListener('click', restartGame);
+
+window.addEventListener('autoSkip', () => {
+  if (gameOver) return;
+
+  const boxResult = document.createElement('div');
+  boxResult.className = 'result-box';
+  boxResult.textContent = `⏰ Player ${currentPlayer} skipped! 0 points.`;
+  resultArea.appendChild(boxResult);
+
+  selectedBoxes = [];
+  endOrNextTurn();
+});
+
+resetBoxes();
+updateDisplay();
