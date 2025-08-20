@@ -73,16 +73,24 @@ function checkScore(b1, b2) {
 }
 
 function endOrNextTurn() {
+  // Agar ye last move hai → final result show
   if (round === 3 && currentPlayer === 2) {
     gameOver = true;
-    setTimeout(showFinalResult, 500);
-  } else {
-    currentPlayer = currentPlayer === 1 ? 2 : 1;
-    if (currentPlayer === 1) round++;
+    // ✅ Last score reflect hoga
     updateDisplay();
-    resetBoxes();
-    if (window.RoundTimer) window.RoundTimer.reset();
+    setTimeout(showFinalResult, 500);
+    return;
   }
+
+  // Turn switch
+  currentPlayer = currentPlayer === 1 ? 2 : 1;
+
+  // ✅ Round increment jab Player 2 complete kare
+  if (currentPlayer === 1) round++;
+
+  updateDisplay();
+  resetBoxes();
+  if (window.RoundTimer) window.RoundTimer.reset();
 }
 
 function showFinalResult() {
